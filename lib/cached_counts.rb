@@ -48,6 +48,9 @@ module CachedCounts
     #   grabbed from the cache or DB at startup.
     #
     def caches_count_where(attribute_name, options = {})
+      # Inject count method until table is ready
+      return unless table_exists?
+
       # Delay actual run to work around circular dependencies
       klass = self
       ActiveSupport.on_load :cached_counts do
@@ -93,6 +96,9 @@ module CachedCounts
     #   Cache version - bump if you change the definition of a count.
     #
     def caches_count_of(attribute_name, options = {})
+      # Inject count method until table is ready
+      return unless table_exists?
+
       # Delay actual run to work around circular dependencies
       klass = self
       ActiveSupport.on_load :cached_counts do
